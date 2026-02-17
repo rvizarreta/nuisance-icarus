@@ -97,8 +97,8 @@ GenericFlux_Tester::GenericFlux_Tester(std::string name, std::string inputfile,
   this->AddEventVariablesToTree();
   this->AddSignalFlagsToTree();
 
-  Fill_ICARUS_QELike_Variable = Config::Get().GetParB("AddICARUSVar");
-  if( true ){
+  Fill_ICARUS_QELike_Variable = Config::Get().GetParB("Add_ICARUS_QELike");
+  if( Fill_ICARUS_QELike_Variable ){
     NUIS_LOG(SAM, " Generic Flux Adding ICARUS QELike variables");
     this->AddICARUS1muNp0piVariablesToTree();
     //this->AddICARUS1mu2p0piVariablesToTree();
