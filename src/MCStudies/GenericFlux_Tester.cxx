@@ -98,10 +98,10 @@ GenericFlux_Tester::GenericFlux_Tester(std::string name, std::string inputfile,
   this->AddSignalFlagsToTree();
 
   Fill_ICARUS_QELike_Variable = Config::Get().GetParB("AddICARUSVar");
-  if( Fill_ICARUS_QELike_Variable ){
+  if( True ){
     NUIS_LOG(SAM, " Generic Flux Adding ICARUS QELike variables");
     this->AddICARUS1muNp0piVariablesToTree();
-    this->AddICARUS1mu2p0piVariablesToTree();
+    //this->AddICARUS1mu2p0piVariablesToTree();
   }
 
   Fill_SBND_QELike_Variable = Config::Get().GetParB("Add_SBND_QELike");
