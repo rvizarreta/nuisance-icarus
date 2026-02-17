@@ -316,7 +316,7 @@ void GenericFlux_Tester::FillICARUS1muNp0piVariablesToTree(FitEvent *event) {
       nP_1muNp0pi+=1;
       if ( momentum > maxMomentumP_1muNp0pi ) {
         maxMomentumP_1muNp0pi = momentum;
-        passProtonPCut_1muNp0pi = (momentum > 0.4 && momentum < 1.);
+        passProtonPCut_1muNp0pi = (momentum > 0.31);
       }
     }
 
