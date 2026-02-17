@@ -1,4 +1,7 @@
+<?xml version="1.0"?>
 <nuisance>
-  <config Add_ICARUS_QELike="1"/>
-  <config Add_ICARUS_pi0="1"/>
+  <config>
+    <Add_ICARUS_QELike>1</Add_ICARUS_QELike>
+    <Add_ICARUS_pi0>1</Add_ICARUS_pi0>
+  </config>
 </nuisance>
