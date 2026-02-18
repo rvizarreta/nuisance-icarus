@@ -279,7 +279,7 @@ void GenericFlux_Tester::AddICARUS1muNp0piVariablesToTree() {
 void GenericFlux_Tester::FillICARUS1muNp0piVariablesToTree(FitEvent *event) {
 
   unsigned int nMu_1muNp0pi(0), nP_1muNp0pi(0), nPi_1muNp0pi(0);
-  unsigned int nPhoton_1muNp0pi(0), nMesons_1muNp0pi(0), nBaryonsAndPi0_1muNp0pi(0);
+  unsigned int nPhoton_1muNp0pi(0), nElectron_1muNp0pi(0), nMesons_1muNp0pi(0), nBaryonsAndPi0_1muNp0pi(0);
   double maxMomentumP_1muNp0pi = -999.;
   bool passProtonPCut_1muNp0pi = false;
 
@@ -320,9 +320,12 @@ void GenericFlux_Tester::FillICARUS1muNp0piVariablesToTree(FitEvent *event) {
       }
     }
 
-    if ( abs(pdgc) == 111 || abs(pdgc) == 211 ) nPi_1muNp0pi+=1;
+    // Pion veto with momentum threshold
+    if ( (abs(pdgc) == 111 || abs(pdgc) == 211) && momentum > 0.087 ) nPi_1muNp0pi+=1;
     // CHECK A SIMILAR DEFINITION AS MINERVA FOR EXTRA REJECTION OF UNWANTED THINGS IN SIGNAL DEFN.
-    if ( abs(pdgc) == 22 && part_4mom.E()/1000. > 0.01 ) nPhoton_1muNp0pi+=1;
+    if ( abs(pdgc) == 22 && part_4mom.E()/1000. > 0.087 ) nPhoton_1muNp0pi+=1;
+    // Electron veto with momentum threshold
+    if ( abs(pdgc) == 11 && momentum > 0.087 ) nElectron_1muNp0pi+=1;
     else if ( abs(pdgc) == 211 || abs(pdgc) == 321 || abs(pdgc) == 323 ||
               pdgc == 111 || pdgc == 130 || pdgc == 310 || pdgc == 311 ||
               pdgc == 313 || abs(pdgc) == 221 || abs(pdgc) == 331 ) nMesons_1muNp0pi+=1;
@@ -337,6 +340,7 @@ void GenericFlux_Tester::FillICARUS1muNp0piVariablesToTree(FitEvent *event) {
                              nP_1muNp0pi>0 && passProtonPCut_1muNp0pi &&
                              nPi_1muNp0pi==0 &&
                              nPhoton_1muNp0pi==0 &&
+                             nElectron_1muNp0pi==0 &&
                              nMesons_1muNp0pi==0 &&
                              nBaryonsAndPi0_1muNp0pi==0;
 
