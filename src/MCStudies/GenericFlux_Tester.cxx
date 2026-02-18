@@ -321,7 +321,7 @@ void GenericFlux_Tester::FillICARUS1muNp0piVariablesToTree(FitEvent *event) {
     }
 
     // Pion veto with momentum threshold
-    if ( (abs(pdgc) == 111 || abs(pdgc) == 211) && momentum > 0.087 ) nPi_1muNp0pi+=1;
+    if ( (abs(pdgc) == 211) && momentum > 0.087 ) nPi_1muNp0pi+=1;
     // CHECK A SIMILAR DEFINITION AS MINERVA FOR EXTRA REJECTION OF UNWANTED THINGS IN SIGNAL DEFN.
     if ( abs(pdgc) == 22 && part_4mom.E()/1000. > 0.087 ) nPhoton_1muNp0pi+=1;
     // Electron veto with momentum threshold
@@ -340,9 +340,7 @@ void GenericFlux_Tester::FillICARUS1muNp0piVariablesToTree(FitEvent *event) {
                              nP_1muNp0pi>0 && passProtonPCut_1muNp0pi &&
                              nPi_1muNp0pi==0 &&
                              nPhoton_1muNp0pi==0 &&
-                             nElectron_1muNp0pi==0 &&
-                             nMesons_1muNp0pi==0 &&
-                             nBaryonsAndPi0_1muNp0pi==0;
+                             nElectron_1muNp0pi==0;
 
   bool IsAntiNu = event->GetNeutrinoIn()->fPID<0;
 
