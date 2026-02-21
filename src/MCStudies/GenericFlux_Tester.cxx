@@ -316,13 +316,13 @@ void GenericFlux_Tester::FillICARUS1muNp0piVariablesToTree(FitEvent *event) {
       nP_1muNp0pi+=1;
       if ( momentum > maxMomentumP_1muNp0pi ) {
         maxMomentumP_1muNp0pi = momentum;
-        passProtonPCut_1muNp0pi = (momentum > 0.31);
+        passProtonPCut_1muNp0pi = (momentum > 0.31 && momentum < 1.);
       }
     }
 
     // Pion veto with momentum threshold
     if ( (abs(pdgc) == 211) && momentum > 0.087 ) nPi_1muNp0pi+=1;
-    // CHECK A SIMILAR DEFINITION AS MINERVA FOR EXTRA REJECTION OF UNWANTED THINGS IN SIGNAL DEFN.
+    // Photon veto with momentum threshold
     if ( abs(pdgc) == 22 && part_4mom.E()/1000. > 0.025 ) nPhoton_1muNp0pi+=1;
     // Electron veto with momentum threshold
     if ( abs(pdgc) == 11 && momentum > 0.0255 ) nElectron_1muNp0pi+=1;
