@@ -340,7 +340,7 @@ void GenericFlux_Tester::FillICARUS1muNp0piVariablesToTree(FitEvent *event) {
                              nP_1muNp0pi>0 && passProtonPCut_1muNp0pi &&
                              nPi_1muNp0pi==0 &&
                              nPhoton_1muNp0pi==0 &&
-                             nElectron_1muNp0pi==0
+                             nElectron_1muNp0pi==0 &&
                              nMesons_1muNp0pi==0 &&
                              nBaryonsAndPi0_1muNp0pi==0;
 
