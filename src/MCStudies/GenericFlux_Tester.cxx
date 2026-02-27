@@ -322,7 +322,6 @@ void GenericFlux_Tester::FillICARUS1muNp0piVariablesToTree(FitEvent *event) {
 
     // Pion veto with momentum threshold
     if ( (abs(pdgc) == 211) && momentum > 0.087 ) nPi_1muNp0pi+=1;
-    if ( abs(pdgc) == 111 ) nPi_1muNp0pi+=1;
     // Photon veto with momentum threshold
     if ( abs(pdgc) == 22 && part_4mom.E()/1000. > 0.025 ) nPhoton_1muNp0pi+=1;
     // Electron veto with momentum threshold
