@@ -279,7 +279,7 @@ void GenericFlux_Tester::AddICARUS1muNp0piVariablesToTree() {
 void GenericFlux_Tester::FillICARUS1muNp0piVariablesToTree(FitEvent *event) {
 
   unsigned int nMu_1muNp0pi(0), nP_1muNp0pi(0), nPi_1muNp0pi(0);
-  unsigned int nPhoton_1muNp0pi(0), nElectron_1muNp0pi(0), nMesons_1muNp0pi(0), nBaryonsAndPi0_1muNp0pi(0);
+  unsigned int nPhoton_1muNp0pi(0), nMesons_1muNp0pi(0), nBaryonsAndPi0_1muNp0pi(0);
   double maxMomentumP_1muNp0pi = -999.;
   bool passProtonPCut_1muNp0pi = false;
 
@@ -300,10 +300,11 @@ void GenericFlux_Tester::FillICARUS1muNp0piVariablesToTree(FitEvent *event) {
 
     // ICARUS 1muNp0pi
 
+
     // All FS protons for generic purpose
     if(pdgc==2212){
       protons.push_back(event->PartInfo(i));
-    }  
+    }
 
     double momentum = part_4mom.Vect().Mag()/1000.;
 
@@ -330,7 +331,6 @@ void GenericFlux_Tester::FillICARUS1muNp0piVariablesToTree(FitEvent *event) {
               pdgc == 4112 || pdgc == 4122 || pdgc == 4212 || pdgc == 4222 ||
               pdgc == 411 || pdgc == 421 || pdgc == 111 ) nBaryonsAndPi0_1muNp0pi+=1;
 
-
   }
 
   ICARUS_1muNp0pi_IsSignal = nMu_1muNp0pi==1 &&
@@ -339,15 +339,6 @@ void GenericFlux_Tester::FillICARUS1muNp0piVariablesToTree(FitEvent *event) {
                              nPhoton_1muNp0pi==0 &&
                              nMesons_1muNp0pi==0 &&
                              nBaryonsAndPi0_1muNp0pi==0;
-
-
-  }
-
-  ICARUS_1muNp0pi_IsSignal = nMu_1muNp0pi==1 &&
-                             nP_1muNp0pi>0 && passProtonPCut_1muNp0pi &&
-                             nPi_1muNp0pi==0 &&
-                             nPhoton_1muNp0pi==0 &&
-                             nElectron_1muNp0pi==0;
 
   bool IsAntiNu = event->GetNeutrinoIn()->fPID<0;
 
