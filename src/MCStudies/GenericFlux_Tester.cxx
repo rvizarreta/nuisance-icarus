@@ -316,23 +316,29 @@ void GenericFlux_Tester::FillICARUS1muNp0piVariablesToTree(FitEvent *event) {
       nP_1muNp0pi+=1;
       if ( momentum > maxMomentumP_1muNp0pi ) {
         maxMomentumP_1muNp0pi = momentum;
-        passProtonPCut_1muNp0pi = (momentum > 0.31);
+        passProtonPCut_1muNp0pi = (momentum > 0.4 && momentum < 1.);
       }
     }
 
-    // Pion veto with momentum threshold
-    if ( (abs(pdgc) == 211) && momentum > 0.087 ) nPi_1muNp0pi+=1;
-    if ( abs(pdgc) == 111 ) nPi_1muNp0pi+=1;
-    // Photon veto with momentum threshold
-    if ( abs(pdgc) == 22 && part_4mom.E()/1000. > 0.025 ) nPhoton_1muNp0pi+=1;
-    // Electron veto with momentum threshold
-    if ( abs(pdgc) == 11 && momentum > 0.0255 ) nElectron_1muNp0pi+=1;
-//     else if ( abs(pdgc) == 321 || abs(pdgc) == 323 ||
-//               pdgc == 111 || pdgc == 130 || pdgc == 310 || pdgc == 311 ||
-//               pdgc == 313 || abs(pdgc) == 221 || abs(pdgc) == 331 ) nMesons_1muNp0pi+=1;
-//     else if ( pdgc == 3112 || pdgc == 3122 || pdgc == 3212 || pdgc == 3222 ||
-//               pdgc == 4112 || pdgc == 4122 || pdgc == 4212 || pdgc == 4222 ||
-//               pdgc == 411 || pdgc == 421 || pdgc == 111 ) nBaryonsAndPi0_1muNp0pi+=1;
+    if ( abs(pdgc) == 111 || abs(pdgc) == 211 ) nPi_1muNp0pi+=1;
+    // CHECK A SIMILAR DEFINITION AS MINERVA FOR EXTRA REJECTION OF UNWANTED THINGS IN SIGNAL DEFN.
+    if ( abs(pdgc) == 22 && part_4mom.E()/1000. > 0.01 ) nPhoton_1muNp0pi+=1;
+    else if ( abs(pdgc) == 211 || abs(pdgc) == 321 || abs(pdgc) == 323 ||
+              pdgc == 111 || pdgc == 130 || pdgc == 310 || pdgc == 311 ||
+              pdgc == 313 || abs(pdgc) == 221 || abs(pdgc) == 331 ) nMesons_1muNp0pi+=1;
+    else if ( pdgc == 3112 || pdgc == 3122 || pdgc == 3212 || pdgc == 3222 ||
+              pdgc == 4112 || pdgc == 4122 || pdgc == 4212 || pdgc == 4222 ||
+              pdgc == 411 || pdgc == 421 || pdgc == 111 ) nBaryonsAndPi0_1muNp0pi+=1;
+
+
+  }
+
+  ICARUS_1muNp0pi_IsSignal = nMu_1muNp0pi==1 &&
+                             nP_1muNp0pi>0 && passProtonPCut_1muNp0pi &&
+                             nPi_1muNp0pi==0 &&
+                             nPhoton_1muNp0pi==0 &&
+                             nMesons_1muNp0pi==0 &&
+                             nBaryonsAndPi0_1muNp0pi==0;
 
 
   }
