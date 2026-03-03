@@ -327,7 +327,7 @@ void GenericFlux_Tester::FillICARUS1muNp0piVariablesToTree(FitEvent *event) {
     if ( abs(pdgc) == 11 && momentum > 0.0255 ) nElectron_1muNp0pi+=1;
     // Photon veto with momentum threshold
     if ( abs(pdgc) == 22 && part_4mom.E()/1000. > 0.025 ) nPhoton_1muNp0pi+=1;
-    else if ( abs(pdgc) == 321 || abs(pdgc) == 323 ||
+    else if ( abs(pdgc) == 211 || abs(pdgc) == 321 || abs(pdgc) == 323 ||
               pdgc == 111 || pdgc == 130 || pdgc == 310 || pdgc == 311 ||
               pdgc == 313 || abs(pdgc) == 221 || abs(pdgc) == 331 ) nMesons_1muNp0pi+=1;
     else if ( pdgc == 3112 || pdgc == 3122 || pdgc == 3212 || pdgc == 3222 ||
