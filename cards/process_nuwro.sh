@@ -8,7 +8,7 @@ mkdir -p /exp/icarus/data/users/rvizarr/nuisance/NuWro/fhc_Nu-14
 
 # Process fhc_Nu14 directory
 echo "Processing fhc_Nu14 files..."
-INPUT_DIR1="/exp/icarus/data/users/jskim/Generators/NuWro/25.11/ICARUS/251202_NuWro_BaseCard_1MEvents/Target_Ar/fhc_Nu14"
+INPUT_DIR1="/pnfs/icarus/persistent/users/jskim/Generators/NuWro/25.11/ICARUS/251202_NuWro_BaseCard_1MEvents/Target_Ar/fhc_Nu14"
 OUTPUT_DIR1="/exp/icarus/data/users/rvizarr/nuisance/NuWro/fhc_Nu14"
 
 for infile in ${INPUT_DIR1}/output_NuWro_*.root; do
@@ -32,7 +32,7 @@ done
 
 # Process fhc_Nu-14 directory
 echo "Processing fhc_Nu-14 files..."
-INPUT_DIR2="/exp/icarus/data/users/jskim/Generators/NuWro/25.11/ICARUS/251202_NuWro_BaseCard_1MEvents/Target_Ar/fhc_Nu-14"
+INPUT_DIR2="/pnfs/icarus/persistent/users/jskim/Generators/NuWro/25.11/ICARUS/251202_NuWro_BaseCard_1MEvents/Target_Ar/fhc_Nu-14"
 OUTPUT_DIR2="/exp/icarus/data/users/rvizarr/nuisance/NuWro/fhc_Nu-14"
 
 for infile in ${INPUT_DIR2}/output_NuWro_*.root; do
