@@ -1,0 +1,52 @@
+executable  = /exp/icarus/app/users/rvizarr/nuisance-icarus/nuisance-icarus/cards/run_neut_nuisflat.sh
+arguments   = $(FLUX_DIR) $(FILE_NUM)
+output      = /exp/icarus/app/users/rvizarr/nuisance-icarus/nuisance-icarus/cards/logs/neut_nuisflat_$(FLUX_DIR)_$(FILE_NUM).out
+error       = /exp/icarus/app/users/rvizarr/nuisance-icarus/nuisance-icarus/cards/logs/neut_nuisflat_$(FLUX_DIR)_$(FILE_NUM).err
+log         = /exp/icarus/app/users/rvizarr/nuisance-icarus/nuisance-icarus/cards/logs/neut_nuisflat.log
+request_memory = 8GB
+request_cpus   = 1
++ProjectName   = "icarus"
+
+FLUX_DIR=fhc_Nu14
+FILE_NUM=0
+queue
+FILE_NUM=1
+queue
+FILE_NUM=2
+queue
+FILE_NUM=3
+queue
+FILE_NUM=4
+queue
+FILE_NUM=5
+queue
+FILE_NUM=6
+queue
+FILE_NUM=7
+queue
+FILE_NUM=8
+queue
+FILE_NUM=9
+queue
+
+FLUX_DIR=fhc_Nu-14
+FILE_NUM=0
+queue
+FILE_NUM=1
+queue
+FILE_NUM=2
+queue
+FILE_NUM=3
+queue
+FILE_NUM=4
+queue
+FILE_NUM=5
+queue
+FILE_NUM=6
+queue
+FILE_NUM=7
+queue
+FILE_NUM=8
+queue
+FILE_NUM=9
+queue
