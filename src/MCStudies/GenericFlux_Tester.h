@@ -217,6 +217,9 @@ public:
   // - Tree variables
   // 1) 1muNp0pi
   bool ICARUS_1muNp0pi_IsSignal;
+  bool ICARUS_1muNp0pi_IsSignal_Howard;
+  bool ICARUS_1muNp0pi_IsSignal_muonChanged;
+  bool ICARUS_1muNp0pi_IsSignal_protonChanged;
   float ICARUS_1muNp0pi_deltaPT;
   float ICARUS_1muNp0pi_deltaalphaT;
   float ICARUS_1muNp0pi_MuonCos;

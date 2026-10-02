@@ -268,6 +268,10 @@ void GenericFlux_Tester::AddICARUS1muNp0piVariablesToTree() {
   NUIS_LOG(SAM, "Adding ICARUS 1muNp0pi variables");
 
   eventVariables->Branch("ICARUS_1muNp0pi_IsSignal", &ICARUS_1muNp0pi_IsSignal, "ICARUS_1muNp0pi_IsSignal/O");
+  // Steps morphing Howard's signal definition into ours (see FillICARUS1muNp0piVariablesToTree)
+  eventVariables->Branch("ICARUS_1muNp0pi_IsSignal_Howard", &ICARUS_1muNp0pi_IsSignal_Howard, "ICARUS_1muNp0pi_IsSignal_Howard/O");
+  eventVariables->Branch("ICARUS_1muNp0pi_IsSignal_muonChanged", &ICARUS_1muNp0pi_IsSignal_muonChanged, "ICARUS_1muNp0pi_IsSignal_muonChanged/O");
+  eventVariables->Branch("ICARUS_1muNp0pi_IsSignal_protonChanged", &ICARUS_1muNp0pi_IsSignal_protonChanged, "ICARUS_1muNp0pi_IsSignal_protonChanged/O");
   eventVariables->Branch("ICARUS_1muNp0pi_deltaPT", &ICARUS_1muNp0pi_deltaPT, "ICARUS_1muNp0pi_deltaPT/F");
   eventVariables->Branch("ICARUS_1muNp0pi_deltaalphaT", &ICARUS_1muNp0pi_deltaalphaT, "ICARUS_1muNp0pi_deltaalphaT/F");
   eventVariables->Branch("ICARUS_1muNp0pi_MuonCos", &ICARUS_1muNp0pi_MuonCos, "ICARUS_1muNp0pi_MuonCos/F");
@@ -278,10 +282,20 @@ void GenericFlux_Tester::AddICARUS1muNp0piVariablesToTree() {
 
 void GenericFlux_Tester::FillICARUS1muNp0piVariablesToTree(FitEvent *event) {
 
-  unsigned int nMu_1muNp0pi(0), nP_1muNp0pi(0), nPi_1muNp0pi(0);
+  // The signal definition is built from Howard's CC0piNp one, changing a single
+  // requirement per step so that the effect of each change can be read from the flat tree:
+  //   _Howard        : muon 0.226 < p < 0.8 GeV, leading proton 0.4 < p < 1.0 GeV,
+  //                    no pi+-/pi0 at any momentum
+  //   _muonChanged   : muon upper bound (0.8 GeV) removed
+  //   _protonChanged : leading proton p > 0.31 GeV, no upper bound
+  //   _IsSignal      : pi+- vetoed only above 0.087 GeV (KE > 25 MeV), pi0 still always vetoed
+  // Common to every step: exactly one muon, at least one proton, no photon above 10 MeV,
+  // no other mesons or strange/charm baryons.
+
+  unsigned int nMu_1muNp0pi(0), nMuHoward_1muNp0pi(0), nP_1muNp0pi(0);
+  unsigned int nPi_1muNp0pi(0), nPiAny_1muNp0pi(0);
   unsigned int nPhoton_1muNp0pi(0), nElectron_1muNp0pi(0), nMesons_1muNp0pi(0), nBaryonsAndPi0_1muNp0pi(0);
   double maxMomentumP_1muNp0pi = -999.;
-  bool passProtonPCut_1muNp0pi = false;
 
   std::vector<FitParticle *> protons;
 
@@ -307,43 +321,70 @@ void GenericFlux_Tester::FillICARUS1muNp0piVariablesToTree(FitEvent *event) {
 
     double momentum = part_4mom.Vect().Mag()/1000.;
 
-    bool PassMuonPCut = (momentum > 0.226);
+    // Muon: ours has only a lower bound, Howard's also has an upper bound
     if ( abs(pdgc) == 13 ) {
-      if (PassMuonPCut) nMu_1muNp0pi+=1;
+      if (momentum > 0.226) nMu_1muNp0pi+=1;
+      if (momentum > 0.226 && momentum < 0.8) nMuHoward_1muNp0pi+=1;
     }
 
-      if ( abs(pdgc) == 2212 ) {
+    // Proton: keep the momentum of the leading one, the cuts are applied after the loop
+    if ( abs(pdgc) == 2212 ) {
       nP_1muNp0pi+=1;
-      if ( momentum > maxMomentumP_1muNp0pi ) {
-        maxMomentumP_1muNp0pi = momentum;
-        passProtonPCut_1muNp0pi = (momentum > 0.31);
-      }
+      if ( momentum > maxMomentumP_1muNp0pi ) maxMomentumP_1muNp0pi = momentum;
     }
 
-    // Pion veto with momentum threshold
+    // Pions
+    // - Howard: any charged or neutral pion is vetoed
+    if ( abs(pdgc) == 211 || abs(pdgc) == 111 ) nPiAny_1muNp0pi+=1;
+    // - Ours: charged pion vetoed above 0.087 GeV, neutral pion always vetoed
     if ( (abs(pdgc) == 211) && momentum > 0.087 ) nPi_1muNp0pi+=1;
     if ( abs(pdgc) == 111 ) nPi_1muNp0pi+=1;
+
     // Electron veto with momentum threshold
     //if ( abs(pdgc) == 11 && momentum > 0.0255 ) nElectron_1muNp0pi+=1;
     // Photon veto with momentum threshold
+    // Pions are not listed in the meson check below, they are handled above.
+    // If they were, any charged pion would be vetoed there regardless of the 0.087 GeV threshold.
     if ( abs(pdgc) == 22 && part_4mom.E()/1000. > 0.01 ) nPhoton_1muNp0pi+=1;
-    else if ( abs(pdgc) == 211 || abs(pdgc) == 321 || abs(pdgc) == 323 ||
-              pdgc == 111 || pdgc == 130 || pdgc == 310 || pdgc == 311 ||
+    else if ( abs(pdgc) == 321 || abs(pdgc) == 323 ||
+              pdgc == 130 || pdgc == 310 || pdgc == 311 ||
               pdgc == 313 || abs(pdgc) == 221 || abs(pdgc) == 331 ) nMesons_1muNp0pi+=1;
     else if ( pdgc == 3112 || pdgc == 3122 || pdgc == 3212 || pdgc == 3222 ||
               pdgc == 4112 || pdgc == 4122 || pdgc == 4212 || pdgc == 4222 ||
               pdgc == 411 || pdgc == 421 || pdgc == 111 ) nBaryonsAndPi0_1muNp0pi+=1;
 
-
   }
 
-  ICARUS_1muNp0pi_IsSignal = nMu_1muNp0pi==1 &&
-                             nP_1muNp0pi>0 && passProtonPCut_1muNp0pi &&
-                             nPi_1muNp0pi==0 &&
-                             nPhoton_1muNp0pi==0 &&
-                             nElectron_1muNp0pi==0 &&
-                             nMesons_1muNp0pi==0 &&
-                             nBaryonsAndPi0_1muNp0pi==0;
+  // Requirements shared by every step
+  bool passCommon = nP_1muNp0pi>0 &&
+                    nPhoton_1muNp0pi==0 &&
+                    nElectron_1muNp0pi==0 &&
+                    nMesons_1muNp0pi==0 &&
+                    nBaryonsAndPi0_1muNp0pi==0;
+
+  bool passProtonHoward = (maxMomentumP_1muNp0pi > 0.4 && maxMomentumP_1muNp0pi < 1.);
+  bool passProtonOurs = (maxMomentumP_1muNp0pi > 0.31);
+
+  // 1) Howard's definition
+  ICARUS_1muNp0pi_IsSignal_Howard = passCommon &&
+                                    nMuHoward_1muNp0pi==1 &&
+                                    passProtonHoward &&
+                                    nPiAny_1muNp0pi==0;
+  // 2) + muon upper bound removed
+  ICARUS_1muNp0pi_IsSignal_muonChanged = passCommon &&
+                                         nMu_1muNp0pi==1 &&
+                                         passProtonHoward &&
+                                         nPiAny_1muNp0pi==0;
+  // 3) + proton window replaced by p > 0.31 GeV
+  ICARUS_1muNp0pi_IsSignal_protonChanged = passCommon &&
+                                           nMu_1muNp0pi==1 &&
+                                           passProtonOurs &&
+                                           nPiAny_1muNp0pi==0;
+  // 4) + charged pion threshold: our signal definition
+  ICARUS_1muNp0pi_IsSignal = passCommon &&
+                             nMu_1muNp0pi==1 &&
+                             passProtonOurs &&
+                             nPi_1muNp0pi==0;
 
   bool IsAntiNu = event->GetNeutrinoIn()->fPID<0;
 
